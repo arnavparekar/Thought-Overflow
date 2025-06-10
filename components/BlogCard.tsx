@@ -20,7 +20,6 @@ export default function BlogCard({ blog, index }: BlogCardProps) {
     >
       <Link href={`/blog/${blog.slug}`} className="block">
         <div className="card-gradient rounded-2xl p-6 h-full hover:glow-effect transition-all duration-300">
-          {/* Header */}
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
               <h2 className="text-xl font-bold text-white mb-2 group-hover:gradient-text transition-all duration-300 line-clamp-2">
@@ -32,7 +31,6 @@ export default function BlogCard({ blog, index }: BlogCardProps) {
             </div>
           </div>
 
-          {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-4">
             {blog.tags.slice(0, 3).map(tag => (
               <span
@@ -49,7 +47,6 @@ export default function BlogCard({ blog, index }: BlogCardProps) {
             )}
           </div>
 
-          {/* Footer */}
           <div className="flex items-center justify-between pt-4 border-t border-slate-800/50">
             <div className="flex items-center gap-4 text-xs text-slate-500">
               <span className="flex items-center gap-1">
