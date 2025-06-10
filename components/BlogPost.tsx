@@ -11,10 +11,12 @@ import { supabase } from '@/lib/supabase'
 interface BlogPostProps {
   blog: Blog
 }
+
 export default function BlogPost({ blog }: BlogPostProps) {
   const [likes, setLikes] = useState(blog.likes)
   const [reactions, setReactions] = useState(blog.reactions)
   const [readingProgress, setReadingProgress] = useState(0)
+
   useEffect(() => {
     const updateReadingProgress = () => {
       const scrollTop = window.scrollY
@@ -22,32 +24,39 @@ export default function BlogPost({ blog }: BlogPostProps) {
       const progress = (scrollTop / docHeight) * 100
       setReadingProgress(progress)
     }
+
     window.addEventListener('scroll', updateReadingProgress)
     return () => window.removeEventListener('scroll', updateReadingProgress)
   }, [])
+
   const handleLike = async () => {
     const newLikes = likes + 1
     setLikes(newLikes)
+    
     await supabase
       .from('blogs')
       .update({ likes: newLikes })
       .eq('id', blog.id)
   }
+
   const handleReaction = async (emoji: string) => {
     const newReactions = { ...reactions }
     newReactions[emoji] = (newReactions[emoji] || 0) + 1
-    setReactions(newReactions) 
+    setReactions(newReactions)
+    
     await supabase
       .from('blogs')
       .update({ reactions: newReactions })
       .eq('id', blog.id)
   }
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
       <div
         className="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 z-50 transition-all"
         style={{ width: `${readingProgress}%` }}
-      />   
+      />
+      
       <motion.article
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -63,7 +72,8 @@ export default function BlogPost({ blog }: BlogPostProps) {
               <span>{formatDate(blog.published_at)}</span>
               <span>{blog.reading_time} min read</span>
             </div>
-          </div>  
+          </div>
+          
           <div className="flex flex-wrap gap-2">
             {blog.tags.map(tag => (
               <span
@@ -75,6 +85,7 @@ export default function BlogPost({ blog }: BlogPostProps) {
             ))}
           </div>
         </header>
+
         <div className="prose prose-invert prose-blue max-w-none">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
@@ -83,6 +94,7 @@ export default function BlogPost({ blog }: BlogPostProps) {
             {blog.content}
           </ReactMarkdown>
         </div>
+
         <footer className="mt-8 pt-8 border-t border-gray-700">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -92,6 +104,7 @@ export default function BlogPost({ blog }: BlogPostProps) {
               >
                 ❤️ {likes}
               </button>
+              
               <div className="flex gap-2">
                 {['👍', '🔥', '💯', '🚀'].map(emoji => (
                   <button
